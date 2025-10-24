@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Interaktiver US ↔ DE Einheiten Umrechner</title>
+<style>
+  body { font-family: Arial, sans-serif; padding: 20px; }
+  .field { margin-bottom: 15px; }
+  label { display: inline-block; width: 180px; }
+  input { width: 100px; }
+</style>
+</head>
+<body>
+<h2>Interaktiver US ↔ DE Einheiten Umrechner</h2>
+
+<div class="field">
+  <label>Zoll ↔ cm:</label>
+  <input type="number" id="inches" placeholder="inch"> ↔ 
+  <input type="number" id="cm" placeholder="cm">
+</div>
+
+<div class="field">
+  <label>Fuß ↔ m:</label>
+  <input type="number" id="feet" placeholder="ft"> ↔ 
+  <input type="number" id="m" placeholder="m">
+</div>
+
+<div class="field">
+  <label>Pfund ↔ kg:</label>
+  <input type="number" id="pounds" placeholder="lb"> ↔ 
+  <input type="number" id="kg" placeholder="kg">
+</div>
+
+<div class="field">
+  <label>Unze ↔ g:</label>
+  <input type="number" id="ounces" placeholder="oz"> ↔ 
+  <input type="number" id="g" placeholder="g">
+</div>
+
+<div class="field">
+  <label>US-Gallone ↔ Liter:</label>
+  <input type="number" id="gallons" placeholder="gal"> ↔ 
+  <input type="number" id="liters" placeholder="L">
+</div>
+
+<div class="field">
+  <label>Quart ↔ Liter:</label>
+  <input type="number" id="quarts" placeholder="qt"> ↔ 
+  <input type="number" id="litersQuart" placeholder="L">
+</div>
+
+<div class="field">
+  <label>Meilen ↔ km:</label>
+  <input type="number" id="miles" placeholder="mi"> ↔ 
+  <input type="number" id="km" placeholder="km">
+</div>
+
+<div class="field">
+  <label>mph ↔ km/h:</label>
+  <input type="number" id="mph" placeholder="mph"> ↔ 
+  <input type="number" id="kmh" placeholder="km/h">
+</div>
+
+<div class="field">
+  <label>Fahrenheit ↔ Celsius:</label>
+  <input type="number" id="fahrenheit" placeholder="°F"> ↔ 
+  <input type="number" id="celsius" placeholder="°C">
+</div>
+
+<div class="field">
+  <label>PSI ↔ Bar:</label>
+  <input type="number" id="psi" placeholder="psi"> ↔ 
+  <input type="number" id="bar" placeholder="bar">
+</div>
+
+<div class="field">
+  <label>BTU ↔ kJ:</label>
+  <input type="number" id="btu" placeholder="BTU"> ↔ 
+  <input type="number" id="kj" placeholder="kJ">
+</div>
+
+<div class="field">
+  <label>Dollar ↔ Euro:</label>
+  <input type="number" id="dollar" placeholder="$"> ↔ 
+  <input type="number" id="euro" placeholder="€">
+</div>
+
+<script>
+const rateDollarEuro = 0.95; // Beispielkurs
+
+function formatNumber(val) {
+    return val === 0 ? 0 : parseFloat(val).toFixed(5);
+}
+
+function bindConversion(usField, deField, factorUS2DE, offset=0) {
+    let active = false;
+
+    usField.addEventListener('input', () => {
+        if (active) return;
+        active = true;
+        let val = parseFloat(usField.value);
+        if (!isNaN(val)) {
+            deField.value = formatNumber(val * factorUS2DE + offset);
+        } else {
+            deField.value = '';
+        }
+        active = false;
+    });
+
+    deField.addEventListener('input', () => {
+        if (active) return;
+        active = true;
+        let val = parseFloat(deField.value);
+        if (!isNaN(val)) {
+            usField.value = formatNumber((val - offset) / factorUS2DE);
+        } else {
+            usField.value = '';
+        }
+        active = false;
+    });
+}
+
+// Bindings
+bindConversion(document.getElementById('inches'), document.getElementById('cm'), 2.54);
+bindConversion(document.getElementById('feet'), document.getElementById('m'), 0.3048);
+bindConversion(document.getElementById('pounds'), document.getElementById('kg'), 0.45359237);
+bindConversion(document.getElementById('ounces'), document.getElementById('g'), 28.3495);
+bindConversion(document.getElementById('gallons'), document.getElementById('liters'), 3.78541);
+bindConversion(document.getElementById('quarts'), document.getElementById('litersQuart'), 0.946353);
+bindConversion(document.getElementById('miles'), document.getElementById('km'), 1.60934);
+bindConversion(document.getElementById('mph'), document.getElementById('kmh'), 1.60934);
+bindConversion(document.getElementById('fahrenheit'), document.getElementById('celsius'), 5/9, -32*5/9);
+bindConversion(document.getElementById('psi'), document.getElementById('bar'), 0.0689476);
+bindConversion(document.getElementById('btu'), document.getElementById('kj'), 1.05506);
+bindConversion(document.getElementById('dollar'), document.getElementById('euro'), rateDollarEuro);
+</script>
+</body>
+</html>
